@@ -55,10 +55,49 @@ abstract class FormConstraints
         return $value !== null ? (int) htmlspecialchars($value) : null;
     }
 
-    public static function postalCode(mixed $value)
+    /**
+     * Code postale
+     */
+    public static function postalCode(mixed $value): ?string
     {
         if ($value) {
             if (!preg_match("~^[0-9]{5}$~", $value)) {
+                $value = null;
+            }
+        }
+        return $value !== null ? htmlspecialchars($value) : null;
+    }
+
+
+    /**
+     * Verify password
+     */
+    static public function passCheck(mixed $value1, mixed $value2)
+    {
+        if ($value1 === $value2) {
+            return true;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Hash Password
+     */
+    static public function passHash(mixed $value): string
+    {
+        $optionsHash = ['cost' => 12];
+        return password_hash($value, PASSWORD_BCRYPT, $optionsHash);
+    }
+
+
+    /**
+     * Email
+     */
+    static public function email($value): ?string
+    {
+        if ($value) {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                 $value = null;
             }
         }

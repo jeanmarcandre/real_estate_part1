@@ -13,34 +13,33 @@ $formBuilder = new FormBuilder($_POST, ['nickname', 'email', 'password']);
 $formValidator = new FormValidator(
     $formBuilder,
     [
-        'nickname' => FormConstraints::length(@$formBuilder->method['title'], 2, 20),
-        'email' => FormConstraints::string(@$formBuilder->method['email']),
-        'password' => FormConstraints::string(@$formBuilder->method['password'], 2, 20),
+        'nickname' => FormConstraints::length(@$formBuilder->method['nickname'], 3, 30),
+        'email' => FormConstraints::email(@$formBuilder->method['email']),
+        'password' => FormConstraints::string(@$formBuilder->method['password']),
     ]
 );
 
 // Submit form
 if ($formValidator->isSubmit()) {
-    var_dump($formBuilder->errors);die();
     if ($formValidator->isValide()) {
 
         # more logic here...
         $userEntity = new UserEntity(
             [
-                'nickname' => htmlspecialchars($formBuilder->method['title']),
+                'nickname' => htmlspecialchars($formBuilder->method['nickname']),
                 'email' => htmlspecialchars($formBuilder->method['email']),
                 'password' => htmlspecialchars($formBuilder->method['password']),
             ]
         );
 
+/* 
         if ($userManager->addUser($userEntity)) {
             $_SESSION['message'] = ["Success enregistrement."];
         } else {
             $_SESSION['message'] = ["Erreur pendant l'enregistrement."];
-        }
+        } */
     } else {
-        $_SESSION['message'] = $formBuilder->errors;
-
+        $_SESSION['message'] = $formValidator->errors;
     }
 }
 
