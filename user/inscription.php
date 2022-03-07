@@ -15,7 +15,7 @@ $formValidator = new FormValidator(
     [
         'nickname' => FormConstraints::length(@$formBuilder->method['nickname'], 3, 30),
         'email' => FormConstraints::email(@$formBuilder->method['email']),
-        'password' => FormConstraints::string(@$formBuilder->method['password']),
+        'password' => FormConstraints::passCheck(@$formBuilder->method['password'], @$formBuilder->method['repeat_password']),
     ]
 );
 
@@ -32,12 +32,12 @@ if ($formValidator->isSubmit()) {
             ]
         );
 
-/* 
+        // Insert user in database
         if ($userManager->addUser($userEntity)) {
             $_SESSION['message'] = ["Success enregistrement."];
         } else {
             $_SESSION['message'] = ["Erreur pendant l'enregistrement."];
-        } */
+        }
     } else {
         $_SESSION['message'] = $formValidator->errors;
     }
